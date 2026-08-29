@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anuradha Rajagopalan — Cloud & DevOps Engineer</title>
+<meta name="description" content="Cloud & DevOps Engineer building AWS infrastructure, CI/CD pipelines, and AI-driven automation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0d13;
+    --bg-raise:#0f121a;
+    --panel:#151924;
+    --panel-2:#1a1f2c;
+    --panel-border:#252b3a;
+    --panel-border-hi:#333a4d;
+    --text:#eef0f3;
+    --muted:#8b93a7;
+    --muted-dim:#636b7e;
+    --signal:#4fd1c5;      /* teal — links / signal / network */
+    --signal-dim:rgba(79,209,197,0.12);
+    --amber:#f0a868;       /* build-in-progress accent */
+    --amber-dim:rgba(240,168,104,0.12);
+    --ok:#34d399;          /* deployed / success / current */
+    --ok-dim:rgba(52,211,153,0.12);
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+    --wrap: 1160px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{color:inherit;}
+  :focus-visible{outline:2px solid var(--signal); outline-offset:3px; border-radius:2px;}
+  ::selection{background:var(--signal); color:#06110f;}
+
+  .wrap{max-width:var(--wrap); margin:0 auto; padding:0 28px;}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,13,19,0.82);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--panel-border);
+  }
+  .nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:60px; gap:16px;
+  }
+  .nav-brand{
+    font-family:var(--mono); font-size:13.5px; color:var(--signal);
+    text-decoration:none; letter-spacing:0.01em; font-weight:500;
+    flex:0 0 auto; white-space:nowrap;
+  }
+  .nav-links{
+    display:flex; gap:30px; list-style:none; margin:0; padding:0;
+    overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none;
+  }
+  .nav-links::-webkit-scrollbar{display:none;}
+  .nav-links li{flex:0 0 auto;}
+  .nav-links a{
+    font-family:var(--mono); font-size:13px; color:var(--muted);
+    text-decoration:none; transition:color .15s ease; position:relative;
+    white-space:nowrap;
+  }
+  .nav-links a::before{content:"$ "; color:var(--panel-border-hi);}
+  .nav-links a:hover{color:var(--text);}
+  .nav-status{display:flex; align-items:center; gap:7px; font-family:var(--mono); font-size:11.5px; color:var(--ok); flex:0 0 auto;}
+  .nav-status .dot{width:6px; height:6px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px var(--ok-dim);}
+  @media (max-width:900px){ .nav-status{display:none;} }
+
+  .nav-toggle{
+    display:none; flex:0 0 auto; align-items:center; justify-content:center;
+    width:34px; height:34px; margin-left:auto;
+    background:transparent; border:1px solid var(--panel-border-hi); border-radius:7px;
+    color:var(--text); cursor:pointer; padding:0;
+  }
+  .nav-toggle:hover{ border-color:var(--signal); color:var(--signal); }
+  .nav-toggle .bar{ display:block; width:16px; height:1.5px; background:currentColor; position:relative; }
+  .nav-toggle .bar::before, .nav-toggle .bar::after{
+    content:""; position:absolute; left:0; width:16px; height:1.5px; background:currentColor;
+  }
+  .nav-toggle .bar::before{ top:-5px; }
+  .nav-toggle .bar::after{ top:5px; }
+
+  @media (max-width:640px){
+    .nav .wrap{ flex-wrap:wrap; height:auto; min-height:60px; padding-top:12px; padding-bottom:12px; }
+    .nav-brand{ font-size:12px; }
+    .nav-toggle{ display:inline-flex; }
+    .nav-links{
+      flex-basis:100%; order:3; overflow-x:visible;
+      flex-direction:column; gap:2px;
+      max-height:0; opacity:0; margin-top:0;
+      transition:max-height .25s ease, opacity .2s ease, margin-top .25s ease;
+      pointer-events:none;
+    }
+    .nav-links.is-open{
+      max-height:260px; opacity:1; margin-top:14px; pointer-events:auto;
+    }
+    .nav-links li{ flex:0 0 auto; width:100%; }
+    .nav-links a{
+      display:block; padding:9px 2px; font-size:13px;
+      border-top:1px solid var(--panel-border);
+    }
+    .nav-links a::before{ display:inline; }
+  }
+  @media (max-width:400px){
+    .nav-brand{ font-size:10.5px; }
+  }
+  html.nav-open{ overflow:hidden; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:88px 0 80px;
+    overflow:hidden;
+    isolation:isolate;
+  }
+  .hero-grid-bg{
+    position:absolute; inset:-20% -10%; z-index:-2;
+    background-image:
+      linear-gradient(rgba(79,209,197,0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,209,197,0.055) 1px, transparent 1px);
+    background-size:42px 42px;
+    animation:drift 44s linear infinite;
+    mask-image:radial-gradient(ellipse 70% 60% at 50% 20%, #000 0%, transparent 75%);
+  }
+  @keyframes drift{
+    from{ transform:translate3d(0,0,0); }
+    to{ transform:translate3d(42px,42px,0); }
+  }
+  .hero-glow{
+    position:absolute; z-index:-1; top:-160px; left:50%; transform:translateX(-50%);
+    width:900px; height:520px;
+    background:radial-gradient(ellipse at center, rgba(79,209,197,0.13) 0%, rgba(79,209,197,0.04) 45%, transparent 70%);
+    filter:blur(10px);
+  }
+  @media (prefers-reduced-motion: reduce){ .hero-grid-bg{ animation:none; } }
+
+  .status-pill{
+    display:inline-flex; align-items:center; gap:9px;
+    font-family:var(--mono); font-size:12px; color:var(--ok);
+    border:1px solid rgba(52,211,153,0.3); background:var(--ok-dim);
+    padding:7px 14px; border-radius:100px; margin-bottom:32px;
+  }
+  .status-pill .dot{width:7px; height:7px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px var(--ok-dim); animation:pulse 2.4s ease-in-out infinite;}
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.45; } }
+  @media (prefers-reduced-motion: reduce){ .status-pill .dot{ animation:none; } }
+
+  .hero-layout{
+    display:grid;
+    grid-template-columns:minmax(300px,0.68fr) minmax(560px,1.32fr);
+    gap:40px;
+    align-items:start;
+  }
+  .hero-copy{ padding-top:4px; }
+
+  .hero h1{
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(34px, 4vw, 50px); line-height:1.14; letter-spacing:-0.01em;
+    margin:0 0 18px; text-wrap:balance;
+  }
+  .hero h1 span{color:var(--signal);}
+  .hero p.lede{color:var(--muted); font-size:16.5px; line-height:1.7; max-width:520px; margin:0 0 32px;}
+
+  .cta-row{display:flex; flex-wrap:wrap; gap:12px; margin-bottom:36px;}
+  .btn{
+    font-family:var(--mono); font-size:13px; text-decoration:none;
+    padding:12px 20px; border-radius:7px; display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+    border:1px solid transparent;
+  }
+  .btn:hover{transform:translateY(-1.5px);}
+  .btn:active{transform:translateY(0);}
+  .btn-primary{background:var(--signal); color:#06120f; font-weight:600;}
+  .btn-primary:hover{box-shadow:0 6px 20px -6px rgba(79,209,197,0.55);}
+  .btn-ghost{background:rgba(255,255,255,0.02); border:1px solid var(--panel-border-hi); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--signal); background:var(--signal-dim);}
+
+  .meta-row{display:flex; flex-wrap:wrap; gap:22px; font-family:var(--mono); font-size:12.5px; color:var(--muted);}
+  .meta-row a{text-decoration:none; color:var(--muted); transition:color .15s ease;}
+  .meta-row a:hover{color:var(--signal);}
+  .meta-row .ic{color:var(--muted-dim); margin-right:5px;}
+
+  /* ---------- PIPELINE DIAGRAM (centerpiece) ---------- */
+  .diagram-card{
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+    padding:0;
+    overflow:hidden;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.55);
+    display:flex; flex-direction:column;
+  }
+  .diagram-bar{
+    display:flex; align-items:center; gap:10px;
+    padding:11px 16px; border-bottom:1px solid var(--panel-border);
+    background:rgba(255,255,255,0.015);
+  }
+  .diagram-bar .dot3{width:9px; height:9px; border-radius:50%; display:inline-block;}
+  .diagram-bar .dot3:nth-child(1){background:#ff5f56;}
+  .diagram-bar .dot3:nth-child(2){background:#ffbd2e;}
+  .diagram-bar .dot3:nth-child(3){background:#27c93f;}
+  .diagram-title{margin-left:6px; font-family:var(--mono); font-size:11.5px; color:var(--muted);}
+  .diagram-live{
+    margin-left:auto; display:flex; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:10.5px; color:var(--ok); letter-spacing:.04em; text-transform:uppercase;
+  }
+  .diagram-live .dot{width:5px; height:5px; border-radius:50%; background:var(--ok); animation:pulse 2.4s ease-in-out infinite;}
+  @media (prefers-reduced-motion: reduce){ .diagram-live .dot{animation:none;} }
+
+  .diagram-body{ padding:16px 18px 12px; display:flex; align-items:center; }
+  .pipeline-svg{ width:100%; height:auto; display:block; }
+
+  .node-box{ fill:var(--panel-2); stroke:var(--panel-border-hi); stroke-width:1; }
+  .node-label{ font-family:'JetBrains Mono', monospace; font-size:14px; fill:var(--text); font-weight:500; }
+  .node-sub{ font-family:'JetBrains Mono', monospace; font-size:10.5px; fill:var(--muted); letter-spacing:.02em; }
+  .node-tag{ font-family:'JetBrains Mono', monospace; font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; }
+
+  .edge-line{ fill:none; stroke:var(--panel-border-hi); stroke-width:1.5; }
+  .packet{ r:3.4px; }
+
+  .n-ok .node-box{ stroke:rgba(52,211,153,0.45); }
+  .n-ok .node-tag{ fill:var(--ok); }
+  .n-amber .node-box{ stroke:rgba(240,168,104,0.45); }
+  .n-amber .node-tag{ fill:var(--amber); }
+  .n-signal .node-box{ stroke:rgba(79,209,197,0.45); }
+  .n-signal .node-tag{ fill:var(--signal); }
+
+  .packet-1{ fill:var(--signal); animation:travel1 3s linear infinite; offset-path:path('M 20,78 H 122'); }
+  .packet-2{ fill:var(--signal); animation:travel2 3s linear infinite; animation-delay:.75s; offset-path:path('M 218,78 H 320'); }
+  .packet-3{ fill:var(--amber); animation:travel3 3s linear infinite; animation-delay:1.5s; offset-path:path('M 416,78 H 518'); }
+  .packet-4{ fill:var(--ok); animation:travel4 3s linear infinite; animation-delay:.4s; offset-path:path('M 484,110 V 168 H 460'); }
+  .packet-5{ fill:var(--ok); animation:travel5 3s linear infinite; animation-delay:1.9s; offset-path:path('M 484,110 V 168 H 580'); }
+  @keyframes travel1{ 0%{ offset-distance:0%; opacity:0; } 8%{opacity:1;} 92%{opacity:1;} 100%{ offset-distance:100%; opacity:0; } }
+  @keyframes travel2{ 0%{ offset-distance:0%; opacity:0; } 8%{opacity:1;} 92%{opacity:1;} 100%{ offset-distance:100%; opacity:0; } }
+  @keyframes travel3{ 0%{ offset-distance:0%; opacity:0; } 8%{opacity:1;} 92%{opacity:1;} 100%{ offset-distance:100%; opacity:0; } }
+  @keyframes travel4{ 0%{ offset-distance:0%; opacity:0; } 8%{opacity:1;} 92%{opacity:1;} 100%{ offset-distance:100%; opacity:0; } }
+  @keyframes travel5{ 0%{ offset-distance:0%; opacity:0; } 8%{opacity:1;} 92%{opacity:1;} 100%{ offset-distance:100%; opacity:0; } }
+
+  .diagram-caption{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+    padding:14px 18px 18px; border-top:1px solid var(--panel-border);
+    font-family:var(--mono); font-size:10.5px; color:var(--muted-dim);
+  }
+  .diagram-caption strong{ color:var(--muted); font-weight:500; }
+
+  /* ---------- terminal strip (typing animation, stacked below diagram) ---------- */
+  .terminal-bar{
+    padding:10px 18px; border-top:1px solid var(--panel-border);
+    background:rgba(0,0,0,0.15);
+  }
+  .terminal-label{ font-family:var(--mono); font-size:10.5px; color:var(--muted-dim); }
+  .terminal-body{
+    padding:4px 18px 18px; background:rgba(0,0,0,0.15);
+    font-family:var(--mono); font-size:12.5px; min-height:52px;
+  }
+  .term-line{ margin:0 0 6px; color:var(--text); line-height:1.6; }
+  .term-line:last-child{ margin-bottom:0; }
+  .term-prompt{ color:var(--signal); margin-right:6px; }
+  .term-cursor{
+    display:inline-block; width:7px; height:14px; margin-left:2px;
+    background:var(--signal); vertical-align:-2px;
+    animation:caret-blink 1s step-end infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .term-cursor{ animation:none; opacity:1; } }
+  @keyframes caret-blink{ 0%,100%{ opacity:1; } 50%{ opacity:0; } }
+
+  @media (prefers-reduced-motion: reduce){
+    .packet-1, .packet-2, .packet-3, .packet-4, .packet-5{
+      animation:none; opacity:1; offset-distance:50%;
+    }
+  }
+
+  /* ---------- desktop pipeline vs. mobile stacked fallback ---------- */
+  .diagram-mobile{ display:none; }
+
+  @media (max-width:980px){
+    .hero-layout{ grid-template-columns:1fr; gap:40px; }
+    .hero-copy{ order:2; }
+    .diagram-card{ order:1; }
+  }
+
+  @media (max-width:640px){
+    .diagram-desktop{ display:none; }
+    .diagram-mobile{ display:flex; flex-direction:column; align-items:stretch; }
+    .diagram-body{ padding:18px 16px 6px; flex:initial; }
+    .terminal-bar{ padding:9px 16px; }
+    .terminal-body{ padding:4px 16px 16px; font-size:11.5px; }
+
+    .mstage{ position:relative; display:flex; flex-direction:column; gap:2px; padding:14px 14px 14px 18px;
+      border:1px solid var(--panel-border-hi); border-left-width:3px; border-radius:8px; background:var(--panel-2); }
+    .mstage + .mstage{ margin-top:22px; }
+    .mstage::before{
+      content:""; position:absolute; left:-1px; top:100%; width:1px; height:22px;
+      background:repeating-linear-gradient(var(--panel-border-hi) 0 4px, transparent 4px 8px);
+    }
+    .mstage:last-child::before{ display:none; }
+    .mstage-name{ font-family:var(--mono); font-size:14px; font-weight:600; color:var(--text); display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .mstage-sub{ font-family:var(--mono); font-size:11.5px; color:var(--muted); }
+    .mstage-tag{ font-family:var(--mono); font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:10px; white-space:nowrap; }
+    .mstage.n-signal{ border-left-color:var(--signal); }
+    .mstage.n-signal .mstage-tag{ color:var(--signal); background:var(--signal-dim); }
+    .mstage.n-amber{ border-left-color:var(--amber); }
+    .mstage.n-amber .mstage-tag{ color:var(--amber); background:var(--amber-dim); }
+    .mstage.n-ok{ border-left-color:var(--ok); }
+    .mstage.n-ok .mstage-tag{ color:var(--ok); background:var(--ok-dim); }
+    .mstage-branch{ display:flex; gap:10px; margin-top:6px; }
+    .mstage-branch .mstage{ flex:1; margin-top:0; padding:11px 12px; }
+    .mstage-branch .mstage::before{ display:none; }
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  section{padding:76px 0; border-top:1px solid var(--panel-border);}
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; color:var(--signal);
+    text-transform:uppercase; letter-spacing:0.1em; margin:0 0 10px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow::before{ content:""; width:16px; height:1px; background:var(--signal); opacity:.5; display:inline-block; }
+  .section-title{font-family:var(--display); font-size:clamp(24px,3vw,32px); font-weight:600; margin:0 0 36px; letter-spacing:-0.01em;}
+
+  /* ---------- ABOUT ---------- */
+  .about-layout{ display:grid; grid-template-columns:0.9fr 1.6fr; gap:48px; }
+  .about-tag{
+    font-family:var(--mono); font-size:12px; color:var(--muted-dim);
+    border-left:2px solid var(--panel-border-hi); padding-left:14px; line-height:1.9;
+  }
+  .about-text{color:var(--muted); font-size:16px; max-width:680px; margin:0;}
+  .about-text strong{color:var(--text); font-weight:600;}
+  @media (max-width:820px){ .about-layout{ grid-template-columns:1fr; gap:20px; } .about-tag{ border-left:none; padding-left:0; } }
+
+  /* ---------- PIPELINE / EXPERIENCE ---------- */
+  .pipeline{position:relative; margin-top:8px; display:flex; flex-direction:column; gap:22px;}
+  .job{
+    position:relative;
+    border:1px solid var(--panel-border); background:var(--panel);
+    border-radius:12px; padding:30px 30px 26px;
+    display:grid; grid-template-columns:250px 1fr; gap:32px;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .job:hover{ border-color:var(--panel-border-hi); }
+  .job-side{ display:flex; flex-direction:column; gap:6px; }
+  .job-role{font-family:var(--display); font-size:20px; font-weight:600; line-height:1.25;}
+  .job-org{color:var(--muted); font-size:14px;}
+  .job-time{font-family:var(--mono); font-size:11.5px; color:var(--muted-dim); margin-top:2px; line-height:1.6; white-space:nowrap;}
+  .job-stage{
+    font-family:var(--mono); font-size:10.5px;
+    padding:4px 10px; border-radius:20px; letter-spacing:.05em; text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:6px; width:fit-content; margin-top:10px;
+  }
+  .job-stage .dot{ width:5px; height:5px; border-radius:50%; }
+  .job-stage.is-current{ background:var(--ok-dim); color:var(--ok); border:1px solid rgba(52,211,153,0.3); }
+  .job-stage.is-current .dot{ background:var(--ok); animation:pulse 2.4s ease-in-out infinite; }
+  .job-stage.is-complete{ background:rgba(139,147,167,0.1); color:var(--muted); border:1px solid var(--panel-border-hi); }
+  .job-stage.is-complete .dot{ background:var(--muted); }
+  @media (prefers-reduced-motion: reduce){ .job-stage.is-current .dot{ animation:none; } }
+
+  .job ul{margin:0; padding-left:18px; color:var(--muted); font-size:14.5px;}
+  .job li{margin-bottom:9px;}
+  .job li::marker{color:var(--signal);}
+  .job li:last-child{margin-bottom:0;}
+
+  @media (max-width:760px){
+    .job{ grid-template-columns:1fr; gap:16px; padding:24px 22px; }
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skill-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; align-items:stretch;}
+  @media (max-width:900px){ .skill-grid{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:560px){ .skill-grid{ grid-template-columns:1fr; } }
+  .skill-card{
+    border:1px solid var(--panel-border); background:var(--panel); border-radius:12px; padding:22px 22px 20px;
+    transition:border-color .2s ease;
+    display:flex; flex-direction:column;
+  }
+  .skill-card:hover{ border-color:var(--panel-border-hi); }
+  .skill-card h4{
+    font-family:var(--mono); font-size:11.5px; color:var(--amber); text-transform:uppercase;
+    letter-spacing:.07em; margin:0 0 14px; display:flex; align-items:center; gap:8px;
+  }
+  .skill-card h4::after{ content:""; flex:1; height:1px; background:var(--panel-border); }
+  .chip-row{display:flex; flex-wrap:wrap; gap:7px;}
+  .chip{
+    font-family:var(--mono); font-size:12px; background:#1c2130; border:1px solid var(--panel-border);
+    color:var(--text); padding:5px 11px; border-radius:6px; transition:border-color .15s ease, color .15s ease;
+  }
+  .chip:hover{ border-color:var(--signal); color:var(--signal); }
+
+  /* ---------- PROJECTS ---------- */
+  .project-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:stretch; }
+  .project{
+    position:relative;
+    border:1px solid var(--panel-border); background:var(--panel);
+    border-radius:12px; padding:28px 26px 26px;
+    border-top:2px solid var(--signal);
+    transition:transform .2s ease, border-color .2s ease;
+    display:flex; flex-direction:column;
+  }
+  .project:hover{ transform:translateY(-3px); border-color:var(--panel-border-hi); }
+  .project.is-poc{ border-top-color:var(--amber); }
+  .project.is-poc:hover{ border-top-color:var(--amber); }
+  .project.is-shipped{ border-top-color:var(--ok); }
+  .project.is-shipped:hover{ border-top-color:var(--ok); }
+  .project-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px; }
+  .project h3{font-family:var(--display); font-size:18px; margin:0; line-height:1.35;}
+  .project-tag{
+    font-family:var(--mono); font-size:10px; padding:3px 9px; border-radius:20px; white-space:nowrap;
+    text-transform:uppercase; letter-spacing:.04em; display:inline-flex; align-items:center; gap:5px;
+  }
+  .project-tag .dot{ width:5px; height:5px; border-radius:50%; }
+  .project.is-poc .project-tag{ color:var(--amber); background:var(--amber-dim); border:1px solid rgba(240,168,104,0.3); }
+  .project.is-poc .project-tag .dot{ background:var(--amber); }
+  .project.is-shipped .project-tag{ color:var(--ok); background:var(--ok-dim); border:1px solid rgba(52,211,153,0.3); }
+  .project.is-shipped .project-tag .dot{ background:var(--ok); }
+  .project p{color:var(--muted); font-size:14.5px; margin:0 0 16px;}
+  .project .chip-row{ margin-top:auto; }
+  @media (max-width:820px){ .project-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- EDUCATION ---------- */
+  .edu-item{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    border-bottom:1px solid var(--panel-border); padding:20px 0;}
+  .edu-item:first-child{padding-top:0;}
+  .edu-item:last-child{border-bottom:none; padding-bottom:0;}
+  .edu-name{font-weight:600; font-size:15.5px; font-family:var(--display);}
+  .edu-detail{color:var(--muted); font-size:13.5px; margin-top:3px;}
+  .edu-time{font-family:var(--mono); font-size:12px; color:var(--muted-dim); white-space:nowrap;}
+
+  /* ---------- CONTACT ---------- */
+  .contact-box{
+    position:relative; overflow:hidden;
+    border:1px solid var(--panel-border); background:linear-gradient(160deg, var(--panel-2), var(--panel)); border-radius:14px;
+    padding:52px 36px; text-align:center;
+  }
+  .contact-box::before{
+    content:""; position:absolute; inset:0; z-index:0;
+    background-image:linear-gradient(rgba(79,209,197,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(79,209,197,0.05) 1px, transparent 1px);
+    background-size:34px 34px;
+    mask-image:radial-gradient(ellipse 60% 100% at 50% 50%, #000 0%, transparent 80%);
+  }
+  .contact-box > *{ position:relative; z-index:1; }
+  .contact-box h2{font-family:var(--display); font-size:28px; margin:0 0 12px; letter-spacing:-0.01em;}
+  .contact-box p{color:var(--muted); margin:0 0 28px; font-size:15px;}
+
+  footer{padding:36px 0 52px; text-align:center; color:var(--muted-dim); font-family:var(--mono); font-size:12px;}
+
+  @media (max-width:640px){
+    .hero{ padding:64px 0 56px; }
+    section{ padding:56px 0; }
+    .contact-box{ padding:40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="#top">anuradha@devops:~$</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">about</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#stack">stack</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+    <div class="nav-status"><span class="dot"></span>uptime 100%</div>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation menu">
+      <span class="bar"></span>
+    </button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-grid-bg" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="status-pill"><span class="dot"></span>open to new opportunities</div>
+
+    <div class="hero-layout">
+      <div class="hero-copy">
+        <h1>Building infrastructure that <span>ships, scales, and doesn't page you at 3am.</span></h1>
+        <p class="lede">Cloud &amp; DevOps Engineer with 2 years deploying AWS infrastructure, custom CI/CD pipelines, and AI-driven automation (n8n, RAG) for production systems. Currently pursuing an MCA at University of Madras alongside full-time work.</p>
+
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#projects">View projects</a>
+          <a class="btn btn-ghost" href="Anuradha_Rajagopalan_Resume.pdf" download>Download résumé</a>
+          <a class="btn btn-ghost" href="#contact">Contact me</a>
+        </div>
+
+        <div class="meta-row">
+          <span><span class="ic">loc:</span>Chennai, India</span>
+          <a href="mailto:anuradharajarr@gmail.com"><span class="ic">mail:</span>anuradharajarr@gmail.com</a>
+          <span><span class="ic">tel:</span>+91 93420 51693</span>
+          <a href="https://www.linkedin.com/in/anuradha-rajagopalan-488739293/" target="_blank" rel="noopener"><span class="ic">in:</span>anuradha-rajagopalan</a>
+        </div>
+      </div>
+
+      <div class="diagram-card" role="img" aria-label="Deployment pipeline diagram: a git push triggers GitHub Actions, which bakes a custom AMI via ImageBuilderStack, then CodeDeploy releases to EC2 and ECS Fargate, monitored by Sentry.">
+        <div class="diagram-bar">
+          <span class="dot3"></span><span class="dot3"></span><span class="dot3"></span>
+          <span class="diagram-title">pipeline.yaml — live</span>
+          <span class="diagram-live"><span class="dot"></span>streaming</span>
+        </div>
+        <div class="diagram-body diagram-desktop">
+          <svg class="pipeline-svg" viewBox="0 24 700 246" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- edges: top row -->
+            <path class="edge-line" d="M 116,62 H 146" stroke-dasharray="3 4"/>
+            <path class="edge-line" d="M 262,62 H 292" stroke-dasharray="3 4"/>
+            <path class="edge-line" d="M 408,62 H 438" stroke-dasharray="3 4"/>
+            <path class="edge-line" d="M 554,62 H 584" stroke-dasharray="3 4"/>
+            <!-- CodeDeploy branches down to EC2/ECS -->
+            <path class="edge-line" d="M 496,94 V 147 H 413 V 200" stroke-dasharray="3 4"/>
+            <path class="edge-line" d="M 496,94 V 147 H 579 V 200" stroke-dasharray="3 4"/>
+
+            <!-- traveling packets -->
+            <circle class="packet packet-1"></circle>
+            <circle class="packet packet-2"></circle>
+            <circle class="packet packet-3"></circle>
+            <circle class="packet packet-4"></circle>
+            <circle class="packet packet-5"></circle>
+
+            <!-- Node: commit -->
+            <g class="n-signal">
+              <rect class="node-box" x="0" y="30" width="116" height="64" rx="10"></rect>
+              <text class="node-label" x="58" y="58" text-anchor="middle">git</text>
+              <text class="node-tag" x="58" y="78" text-anchor="middle" fill="currentColor">push</text>
+            </g>
+
+            <!-- Node: GitHub Actions -->
+            <g class="n-signal">
+              <rect class="node-box" x="146" y="30" width="116" height="64" rx="10"></rect>
+              <text class="node-label" x="204" y="55" text-anchor="middle">Actions</text>
+              <text class="node-sub" x="204" y="71" text-anchor="middle">build · test</text>
+              <text class="node-tag" x="204" y="86" text-anchor="middle" fill="currentColor">ci</text>
+            </g>
+
+            <!-- Node: AMI Build (ImageBuilderStack) -->
+            <g class="n-amber">
+              <rect class="node-box" x="292" y="30" width="116" height="64" rx="10"></rect>
+              <text class="node-label" x="350" y="55" text-anchor="middle">AMI Build</text>
+              <text class="node-sub" x="350" y="71" text-anchor="middle">image builder</text>
+              <text class="node-tag" x="350" y="86" text-anchor="middle" fill="currentColor">bake</text>
+            </g>
+
+            <!-- Node: CodeDeploy -->
+            <g class="n-amber">
+              <rect class="node-box" x="438" y="30" width="116" height="64" rx="10"></rect>
+              <text class="node-label" x="496" y="55" text-anchor="middle">CodeDeploy</text>
+              <text class="node-sub" x="496" y="71" text-anchor="middle">release</text>
+              <text class="node-tag" x="496" y="86" text-anchor="middle" fill="currentColor">deploy</text>
+            </g>
+
+            <!-- Node: Sentry -->
+            <g class="n-ok">
+              <rect class="node-box" x="584" y="30" width="116" height="64" rx="10"></rect>
+              <text class="node-label" x="642" y="58" text-anchor="middle">Sentry</text>
+              <text class="node-tag" x="642" y="78" text-anchor="middle" fill="currentColor">ok</text>
+            </g>
+
+            <!-- Node: EC2 -->
+            <g class="n-ok">
+              <rect class="node-box" x="355" y="200" width="116" height="64" rx="10"></rect>
+              <text class="node-label" x="413" y="228" text-anchor="middle">EC2</text>
+              <text class="node-sub" x="413" y="244" text-anchor="middle">custom AMI</text>
+            </g>
+
+            <!-- Node: ECS Fargate -->
+            <g class="n-ok">
+              <rect class="node-box" x="521" y="200" width="116" height="64" rx="10"></rect>
+              <text class="node-label" x="579" y="228" text-anchor="middle">ECS</text>
+              <text class="node-sub" x="579" y="244" text-anchor="middle">Fargate</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Mobile fallback: vertically stacked, fixed legible type, no scaled SVG -->
+        <div class="diagram-body diagram-mobile" aria-hidden="true">
+          <div class="mstage n-signal">
+            <div class="mstage-name">git <span class="mstage-tag">push</span></div>
+          </div>
+          <div class="mstage n-signal">
+            <div class="mstage-name">Actions <span class="mstage-tag">ci</span></div>
+            <div class="mstage-sub">build · test</div>
+          </div>
+          <div class="mstage n-amber">
+            <div class="mstage-name">AMI Build <span class="mstage-tag">bake</span></div>
+            <div class="mstage-sub">image builder</div>
+          </div>
+          <div class="mstage n-amber">
+            <div class="mstage-name">CodeDeploy <span class="mstage-tag">deploy</span></div>
+            <div class="mstage-sub">release</div>
+          </div>
+          <div class="mstage-branch">
+            <div class="mstage n-ok">
+              <div class="mstage-name">EC2</div>
+              <div class="mstage-sub">custom AMI</div>
+            </div>
+            <div class="mstage n-ok">
+              <div class="mstage-name">ECS</div>
+              <div class="mstage-sub">Fargate</div>
+            </div>
+          </div>
+          <div class="mstage n-ok">
+            <div class="mstage-name">Sentry <span class="mstage-tag">ok</span></div>
+          </div>
+        </div>
+
+        <div class="diagram-caption">
+          <span><strong>pattern:</strong> ImageBuilderStack → Ec2Stack → CodeDeployStack</span>
+          <span><strong>iac:</strong> AWS CDK</span>
+        </div>
+
+        <div class="terminal-bar">
+          <span class="terminal-label">$ whoami --verbose</span>
+        </div>
+        <div class="terminal-body">
+          <p class="term-line"><span class="term-prompt">$</span> <span id="typedLine1"></span></p>
+          <p class="term-line"><span class="term-prompt">$</span> <span id="typedLine2"></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <p class="eyebrow">./about</p>
+    <h2 class="section-title">Init</h2>
+    <div class="about-layout">
+      <div class="about-tag">
+        role: infra + automation<br>
+        focus: aws · cdk · ai orchestration<br>
+        status: currently_employed
+      </div>
+      <p class="about-text">
+        I design and automate <strong>AWS infrastructure</strong> end to end — from a custom AMI baked with Docker, Nginx, Certbot and the CodeDeploy agent, to multi-stack <strong>AWS CDK</strong> architectures that cut manual server setup and standardize deployments across environments. Alongside infrastructure, I build <strong>AI-driven automation workflows</strong>: n8n pipelines for lead generation and inbox triage, and a RAG proof-of-concept combining Node.js, pgvector, and AWS Bedrock embeddings. I'm currently working through an MCA (Distance Education) at the University of Madras while working full-time as a DevOps Developer at Tecofize.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <p class="eyebrow">./deploy</p>
+    <h2 class="section-title">Experience</h2>
+    <div class="pipeline">
+
+      <div class="job">
+        <div class="job-side">
+          <span class="job-role">DevOps Developer</span>
+          <span class="job-org">Tecofize Pvt Ltd</span>
+          <span class="job-time">June 2025 — Present<br>Chennai, India</span>
+          <span class="job-stage is-current"><span class="dot"></span>current</span>
+        </div>
+        <ul>
+          <li>Designed a multi-stack AWS CDK architecture (ImageBuilderStack, Ec2Stack, CodeDeployStack) using a custom AMI pre-baked with Docker, Nginx, Certbot, and the CodeDeploy agent — cutting manual server setup time and standardizing deployments across environments.</li>
+          <li>Built and deployed n8n automation workflows including a Gmail classifier (OpenRouter-powered) and a lead-generation pipeline (Outscraper → Firecrawl → AI scoring → Google Sheets), with ongoing integration work for Outreach.io via HTTP Request nodes.</li>
+          <li>Built a RAG proof-of-concept using Node.js, Docker-based PostgreSQL with pgvector, and AWS Bedrock (Titan Embed Text v2), resolving vector dimension mismatches (1024 vs 1536) and pgvector extension setup.</li>
+          <li>Built and maintained CI/CD pipelines using GitHub Actions, AWS CodePipeline, and CodeDeploy to automate application deployments.</li>
+          <li>Developed and validated backend APIs using NestJS with DynamoDB integration, tested via Postman and Swagger.</li>
+          <li>Debugged AWS Cognito auth flows, IF-node routing, and AI response parsing for a production chatbot, including DynamoDB schema validation for session and lead-management tables.</li>
+          <li>Worked with EC2, ECS Fargate, Lambda, Cognito, Aurora RDS, SQS, SES, EventBridge, IAM, and VPC for cloud-native application development.</li>
+          <li>Implemented monitoring, structured logging, and error tracking using Sentry, with Slack notifications for deployment and operational alerts.</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-side">
+          <span class="job-role">Cloud &amp; AWS Infrastructure Intern</span>
+          <span class="job-org">CreamCollar EduTech Pvt. Ltd.</span>
+          <span class="job-time">Oct 2024 — Jan 2025</span>
+          <span class="job-stage is-complete"><span class="dot"></span>complete</span>
+        </div>
+        <ul>
+          <li>Gained hands-on experience with AWS services including S3, CloudFront, Amplify, EC2, Lambda, CodePipeline, CodeBuild, Route 53, and IAM.</li>
+          <li>Built single-stage and multi-stage Dockerfiles and deployed containerized applications using Docker.</li>
+          <li>Created and managed EC2 instances, configured VPCs, security groups, and IAM policies for secure cloud environments.</li>
+          <li>Strengthened knowledge of AWS networking, cloud security, and deployment workflows through practical implementation.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <p class="eyebrow">./stack</p>
+    <h2 class="section-title">Tools &amp; services</h2>
+    <div class="skill-grid">
+      <div class="skill-card">
+        <h4>Cloud</h4>
+        <div class="chip-row">
+          <span class="chip">EC2</span><span class="chip">ECS</span><span class="chip">Lambda</span>
+          <span class="chip">S3</span><span class="chip">IAM</span><span class="chip">VPC</span>
+          <span class="chip">Cognito</span><span class="chip">Aurora RDS</span><span class="chip">SQS</span>
+          <span class="chip">SES</span><span class="chip">EventBridge</span><span class="chip">Bedrock</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>IaC &amp; CI/CD</h4>
+        <div class="chip-row">
+          <span class="chip">AWS CDK</span><span class="chip">CloudFormation</span><span class="chip">GitHub Actions</span>
+          <span class="chip">CodePipeline</span><span class="chip">CodeDeploy</span><span class="chip">EC2 Image Builder</span>
+          <span class="chip">Docker</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>AI &amp; Automation</h4>
+        <div class="chip-row">
+          <span class="chip">n8n</span><span class="chip">RAG</span><span class="chip">pgvector</span>
+          <span class="chip">Embeddings</span><span class="chip">MCP</span><span class="chip">Orchestration</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Programming</h4>
+        <div class="chip-row">
+          <span class="chip">JavaScript</span><span class="chip">Node.js</span><span class="chip">NestJS</span>
+          <span class="chip">Python</span><span class="chip">SQL</span><span class="chip">HTML/CSS</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Monitoring &amp; Tools</h4>
+        <div class="chip-row">
+          <span class="chip">Postman</span><span class="chip">Swagger</span><span class="chip">Sentry</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Networking</h4>
+        <div class="chip-row">
+          <span class="chip">TCP/IP</span><span class="chip">Subnetting</span><span class="chip">Security Groups</span>
+          <span class="chip">Route 53</span><span class="chip">SPF/DKIM/DMARC</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <p class="eyebrow">./status</p>
+    <h2 class="section-title">Projects</h2>
+
+    <div class="project-grid">
+      <div class="project is-poc">
+        <div class="project-head">
+          <h3>RAG-Based Knowledge Retrieval System (POC)</h3>
+          <span class="project-tag"><span class="dot"></span>poc</span>
+        </div>
+        <p>End-to-end retrieval-augmented generation pipeline using Node.js, PostgreSQL (pgvector), and AWS Bedrock Titan embeddings. Solved real-world implementation challenges including vector dimension mismatches, chunking strategy selection, and cosine-similarity tuning for retrieval accuracy.</p>
+        <div class="chip-row">
+          <span class="chip">Node.js</span><span class="chip">PostgreSQL</span><span class="chip">pgvector</span>
+          <span class="chip">AWS Bedrock</span><span class="chip">Titan Embeddings</span>
+        </div>
+      </div>
+
+      <div class="project is-shipped">
+        <div class="project-head">
+          <h3>AI-Driven AWS Cloud Security Threat Detection</h3>
+          <span class="project-tag"><span class="dot"></span>dashboard</span>
+        </div>
+        <p>Web-based cloud security monitoring dashboard built with HTML, CSS, PHP, MySQL, and Apache. Integrated AWS GuardDuty, IAM, and Amazon SNS via the AWS SDK/CLI to fetch, analyze, and display security findings, with threat severity classification and automated notification workflows.</p>
+        <div class="chip-row">
+          <span class="chip">PHP</span><span class="chip">MySQL</span><span class="chip">Apache</span>
+          <span class="chip">GuardDuty</span><span class="chip">IAM</span><span class="chip">SNS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <p class="eyebrow">./education</p>
+    <h2 class="section-title">Education</h2>
+    <div class="edu-item">
+      <div>
+        <div class="edu-name">University of Madras</div>
+        <div class="edu-detail">Master of Computer Applications (Distance Education)</div>
+      </div>
+      <div class="edu-time">Jan 2026 — Dec 2027</div>
+    </div>
+    <div class="edu-item">
+      <div>
+        <div class="edu-name">Vels Institute of Science and Technology &amp; Advanced Studies</div>
+        <div class="edu-detail">BCA, Cloud Technology &amp; Information Security · CGPA 9.25</div>
+      </div>
+      <div class="edu-time">2022 — 2025</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <h2>$ ./get_in_touch.sh</h2>
+      <p>Open to DevOps, Platform Engineering, and Cloud Automation roles.</p>
+      <div class="cta-row" style="justify-content:center;">
+        <a class="btn btn-primary" href="mailto:anuradharajarr@gmail.com">Email me</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/anuradha-rajagopalan-488739293/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Anuradha Rajagopalan — built &amp; deployed by hand, like the infra.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- mobile nav toggle ---------- */
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  if(navToggle && navLinks){
+    navToggle.addEventListener('click', function(){
+      var isOpen = navLinks.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      document.documentElement.classList.toggle('nav-open', isOpen);
+    });
+    navLinks.addEventListener('click', function(e){
+      if(e.target.tagName === 'A'){
+        navLinks.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.documentElement.classList.remove('nav-open');
+      }
+    });
+  }
+
+  /* ---------- hero terminal typing animation ---------- */
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var el1 = document.getElementById('typedLine1');
+  var el2 = document.getElementById('typedLine2');
+  if(!el1 || !el2) return;
+
+  var lines = [
+    { el: el1, text: 'whoami' },
+    { el: el2, text: 'aws sts get-caller-identity' }
+  ];
+
+  if(reduceMotion){
+    // Show final resting state immediately, no animation, no info loss.
+    el1.textContent = 'whoami';
+    el2.textContent = 'aws sts get-caller-identity';
+    return;
+  }
+
+  function typeLine(line, onDone){
+    var i = 0;
+    line.el.innerHTML = '';
+    var span = document.createElement('span');
+    line.el.appendChild(span);
+    var cursor = document.createElement('span');
+    cursor.className = 'term-cursor';
+    line.el.appendChild(cursor);
+
+    (function step(){
+      if(i <= line.text.length){
+        span.textContent = line.text.slice(0, i);
+        i++;
+        setTimeout(step, 55);
+      } else {
+        cursor.remove();
+        setTimeout(onDone, 260);
+      }
+    })();
+  }
+
+  function run(){
+    typeLine(lines[0], function(){
+      typeLine(lines[1], function(){ /* stays resting after both lines typed */ });
+    });
+  }
+
+  // Start once the hero is visible (cheap: just run on load, it's above the fold).
+  if(document.readyState === 'complete'){ run(); }
+  else{ window.addEventListener('load', run); }
+})();
+</script>
+</body>
+</html>
