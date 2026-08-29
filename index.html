@@ -63,7 +63,14 @@
     font-family:var(--mono); font-size:13.5px; color:var(--signal);
     text-decoration:none; letter-spacing:0.01em; font-weight:500;
     flex:0 0 auto; white-space:nowrap;
+    display:inline-flex; align-items:center; gap:10px;
   }
+  .nav-avatar{
+    width:30px; height:30px; border-radius:50%;
+    object-fit:cover; flex:0 0 auto;
+    border:1.5px solid var(--signal); box-shadow:0 0 0 3px var(--signal-dim);
+  }
+  @media (max-width:400px){ .nav-avatar{ width:26px; height:26px; } }
   .nav-links{
     display:flex; gap:30px; list-style:none; margin:0; padding:0;
     overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none;
@@ -149,15 +156,21 @@
   }
   @media (prefers-reduced-motion: reduce){ .hero-grid-bg{ animation:none; } }
 
+  .status-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:32px; }
   .status-pill{
     display:inline-flex; align-items:center; gap:9px;
     font-family:var(--mono); font-size:12px; color:var(--ok);
     border:1px solid rgba(52,211,153,0.3); background:var(--ok-dim);
-    padding:7px 14px; border-radius:100px; margin-bottom:32px;
+    padding:7px 14px; border-radius:100px;
   }
   .status-pill .dot{width:7px; height:7px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px var(--ok-dim); animation:pulse 2.4s ease-in-out infinite;}
   @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.45; } }
   @media (prefers-reduced-motion: reduce){ .status-pill .dot{ animation:none; } }
+
+  .status-pill.freelance{ color:var(--signal); border-color:rgba(79,209,197,0.3); background:var(--signal-dim); }
+  .status-pill.freelance .dot{ background:var(--signal); box-shadow:0 0 0 3px var(--signal-dim); animation:none; }
+
+  .hero p.intro{ color:var(--text); font-size:17px; line-height:1.6; max-width:540px; margin:0 0 14px; }
 
   .hero-layout{
     display:grid;
@@ -467,7 +480,10 @@
 
 <nav class="nav">
   <div class="wrap">
-    <a class="nav-brand" href="#top">anuradha@devops:~$</a>
+    <a class="nav-brand" href="#top">
+      <img class="nav-avatar" src="assets/avatar.jpg" alt="Anuradha Rajagopalan" width="30" height="30">
+      anuradha@devops:~$
+    </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">about</a></li>
       <li><a href="#experience">experience</a></li>
@@ -486,11 +502,15 @@
   <div class="hero-grid-bg" aria-hidden="true"></div>
   <div class="hero-glow" aria-hidden="true"></div>
   <div class="wrap">
-    <div class="status-pill"><span class="dot"></span>open to new opportunities</div>
+    <div class="status-row">
+      <div class="status-pill"><span class="dot"></span>open to full-time roles</div>
+      <div class="status-pill freelance"><span class="dot"></span>open to freelance / consulting</div>
+    </div>
 
     <div class="hero-layout">
       <div class="hero-copy">
         <h1>Building infrastructure that <span>ships, scales, and doesn't page you at 3am.</span></h1>
+        <p class="intro">A keen learner who enjoys automating and scaling cloud systems — happy to talk full-time roles, freelance projects, or just collaborate on something interesting.</p>
         <p class="lede">Cloud &amp; DevOps Engineer with 2 years deploying AWS infrastructure, custom CI/CD pipelines, and AI-driven automation (n8n, RAG) for production systems. Currently pursuing an MCA at University of Madras alongside full-time work.</p>
 
         <div class="cta-row">
@@ -806,7 +826,7 @@
   <div class="wrap">
     <div class="contact-box">
       <h2>$ ./get_in_touch.sh</h2>
-      <p>Open to DevOps, Platform Engineering, and Cloud Automation roles.</p>
+      <p>Open to DevOps, Platform Engineering, and Cloud Automation roles — and select freelance / consulting work. Got something interesting? Let's collaborate.</p>
       <div class="cta-row" style="justify-content:center;">
         <a class="btn btn-primary" href="mailto:anuradharajarr@gmail.com">Email me</a>
         <a class="btn btn-ghost" href="https://www.linkedin.com/in/anuradha-rajagopalan-488739293/" target="_blank" rel="noopener">LinkedIn</a>
